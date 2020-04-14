@@ -3,15 +3,15 @@ import { PlanetModel} from '../model/PlanetModel';
 import { PlanetService } from '../services/PlanetService';
 import { first } from 'rxjs/operators';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource, MatTable } from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
-import {HttpClient} from '@angular/common/http';
-import {map} from 'rxjs/operators';
 import {AddDialogComponent} from '../dialogs/add/add.dialog.component';
 import {EditDialogComponent} from '../dialogs/edit/edit.dialog.component';
 import {DeleteDialogComponent} from '../dialogs/delete/delete.dialog.component';
 import { ToastrService } from 'ngx-toastr';
+import { ShortestPathDialogComponent } from '../dialogs/shortestpath/shortestpath.dialog.component';
+import { ShortestPathModel} from '../model/ShortestPathModel';
 
 
 @Component({
@@ -26,7 +26,8 @@ export class InterstellaTransportComponent implements OnInit {
   dataSource : MatTableDataSource<PlanetModel>;
 
   constructor( private planetService: PlanetService, private planetModel:PlanetModel,
-               public dialog: MatDialog, private toasterService: ToastrService) { 
+               public dialog: MatDialog, private toasterService: ToastrService, 
+               private shortestPathModel : ShortestPathModel) { 
 
   }
 
@@ -50,16 +51,16 @@ export class InterstellaTransportComponent implements OnInit {
     findShortestPath(name: string, vertexId: string){
       this.planetModel.name= name;
       this.planetModel.vertexId = vertexId;
-      const dialogRef = this.dialog.open(AddDialogComponent, {
-        data: {issue:this.planetModel }
+      const dialogRef = this.dialog.open(ShortestPathDialogComponent, {
+        data: {issue:this.shortestPathModel }
       });
   
       dialogRef.afterClosed().subscribe(result => {
         if (result === 1) {
-          this.planetService.findShortestPath(this.planetModel).pipe(first()).subscribe(data =>{
-            this.toasterService.success('The Shortest Path is ' + data);
+
+          this.planetService.dataChange.value.push(this.planetService.getDialogData());
+          console.log(this.planetService.getDialogData());
             this.refreshTable();
-          })
         }
       });
     }
@@ -94,7 +95,7 @@ export class InterstellaTransportComponent implements OnInit {
       dialogRef.afterClosed().subscribe(result => {
         if (result === 1) {
           // When using an edit things are little different, firstly we find record inside DataService by id
-          const foundIndex = this.planetService.dataChange.value.findIndex(x => x.vertexId === this.planetModel.vertexId);
+          const foundIndex = this.planetService.dataChange.value.findIndex(x => x.vertexId === vertexId);
           // Then you update that record using data from dialogData (values you entered)
           this.planetService.dataChange.value[foundIndex] = this.planetService.getDialogData();
           // And lastly refresh table
@@ -112,7 +113,7 @@ export class InterstellaTransportComponent implements OnInit {
   
       dialogRef.afterClosed().subscribe(result => {
         if (result === 1) {
-          const foundIndex = this.planetService.dataChange.value.findIndex(x => x.vertexId === this.planetModel.vertexId);
+          const foundIndex = this.planetService.dataChange.value.findIndex(x => x.vertexId === vertexId);
           // for delete we use splice in order to remove single object from DataService
           this.planetService.dataChange.value.splice(foundIndex, 1);
           this.refreshTable();

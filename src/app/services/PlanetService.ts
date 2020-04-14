@@ -5,6 +5,7 @@ import { Request, Response, NextFunction } from 'express';
 import { PlanetModel } from '../model/PlanetModel';
 import {BehaviorSubject} from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { ShortestPathModel } from '../model/ShortestPathModel';
 
 
 export type MiddlewareFn = (req: Request, res: Response, next: NextFunction) => void;
@@ -25,8 +26,9 @@ export class PlanetService {
         return this.http.get<any[]>(`${environment.apiUrl}/vertices`);
     }
 
-    findShortestPath(planetModel: PlanetModel){
-      return this.http.post<any[]>(`${environment.apiUrl}/shortest`, planetModel);
+    findShortestPath(shortestPathModel: ShortestPathModel){
+      
+      return this.http.post<any[]>(`${environment.apiUrl}/shortest`, shortestPathModel);
     }
 
     get data(): PlanetModel[] {
@@ -41,7 +43,7 @@ export class PlanetService {
       addPlanet(planetModel: PlanetModel): void {
         this.http.post(`${environment.apiUrl}/vertices`, planetModel).subscribe(data => {
           this.dialogData = planetModel;
-           this.toasterService.success('Planet Successfully added');
+           this.toasterService.success(planetModel.name + 'Planet Successfully added');
           },
           (err: HttpErrorResponse) => {
            this.toasterService.error('Error occurred. Details: ' + err.name + ' ' + err.message);
@@ -53,22 +55,21 @@ export class PlanetService {
         console.log(planetModel);
         this.http.put(`${environment.apiUrl}/vertices`, planetModel).subscribe(data => {
         this.dialogData = planetModel;
-         this.toasterService.success('Successfully edited');
+         this.toasterService.success(planetModel.name + 'Successfully edited');
         },
         (err: HttpErrorResponse) => {
-         this.toasterService.success('Error occurred. Details: ' + err.name + ' ' + err.message);
+         this.toasterService.error('Error occurred. Details: ' + err.name + ' ' + err.message);
         }
     );
     }
     
       // DELETE METHOD
       deletePlanet(planetModel: PlanetModel): void {
-        this.http.delete(`${environment.apiUrl}/vertices`+ planetModel.vertexId).subscribe(data => {
-          console.log(data['']);
-             this.toasterService.success('Successfully deleted');
+        this.http.delete(`${environment.apiUrl}/vertices/`+ planetModel.vertexId).subscribe(data => {
+             this.toasterService.success(planetModel.name + 'Successfully deleted');
           },
           (err: HttpErrorResponse) => {
-            this.toasterService.success('Error occurred. Details: ' + err.name + ' ' + err.message);
+            this.toasterService.error('Error occurred. Details: ' + err.name + ' ' + err.message);
           }
         );
       }

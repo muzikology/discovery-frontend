@@ -21,7 +21,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import {AddDialogComponent} from './dialogs/add/add.dialog.component';
 import {EditDialogComponent} from './dialogs/edit/edit.dialog.component';
 import {DeleteDialogComponent} from './dialogs/delete/delete.dialog.component';
+import { ShortestPathDialogComponent} from './dialogs/shortestpath/shortestpath.dialog.component';
 import { ToastrModule } from 'ngx-toastr';
+import { ShortestPathModel} from './model/ShortestPathModel';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,8 @@ import { ToastrModule } from 'ngx-toastr';
     InterstellaTransportComponent,
     AddDialogComponent,
     EditDialogComponent,
-    DeleteDialogComponent
+    DeleteDialogComponent,
+    ShortestPathDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -51,13 +54,14 @@ import { ToastrModule } from 'ngx-toastr';
   entryComponents: [
     AddDialogComponent,
     EditDialogComponent,
-    DeleteDialogComponent
+    DeleteDialogComponent,
+    ShortestPathDialogComponent
   ],
   exports: [
     MatTableModule,
     MatPaginatorModule
   ],
-  providers: [PlanetModel, PlanetService],
+  providers: [PlanetModel, PlanetService, ShortestPathModel],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
