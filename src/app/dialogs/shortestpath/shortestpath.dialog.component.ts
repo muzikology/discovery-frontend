@@ -35,13 +35,11 @@ export class ShortestPathDialogComponent {
   }
 
   public findShortestPath(): void {
-    this.data.destinationVertex ='';
-    this.data.selectedVertexName='';
-    this.data.sourceVertex = '';
-    this.data.thePath = '';
-    this.data.trafficAllowed = false;
-    this.data.undirectedGraph = false;
-    this.data.vertexName='';
+    this.data.destinationVertex ="string";
+    this.data.sourceVertex = "string";
+    this.data.thePath = "string";
+    this.data.trafficAllowed = true;
+    this.data.undirectedGraph = true;
 
     this.dataService.findShortestPath(this.data);
   }

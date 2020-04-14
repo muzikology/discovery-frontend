@@ -49,6 +49,7 @@ export class InterstellaTransportComponent implements OnInit {
     }
 
     findShortestPath(name: string, vertexId: string){
+
       this.planetModel.name= name;
       this.planetModel.vertexId = vertexId;
       const dialogRef = this.dialog.open(ShortestPathDialogComponent, {
@@ -57,10 +58,8 @@ export class InterstellaTransportComponent implements OnInit {
   
       dialogRef.afterClosed().subscribe(result => {
         if (result === 1) {
-
           this.planetService.dataChange.value.push(this.planetService.getDialogData());
-          console.log(this.planetService.getDialogData());
-            this.refreshTable();
+          this.refreshTable();
         }
       });
     }
@@ -114,13 +113,12 @@ export class InterstellaTransportComponent implements OnInit {
       dialogRef.afterClosed().subscribe(result => {
         if (result === 1) {
           const foundIndex = this.planetService.dataChange.value.findIndex(x => x.vertexId === vertexId);
-          // for delete we use splice in order to remove single object from DataService
+          // for delete we use splice in order to remove single object from Service
           this.planetService.dataChange.value.splice(foundIndex, 1);
           this.refreshTable();
         }
       });
     }
-  
   
     private refreshTable() {
       // Refreshing table using paginator

@@ -16,6 +16,9 @@ export class PlanetService {
     dataChange: BehaviorSubject<PlanetModel[]> = new BehaviorSubject<PlanetModel[]>([]);
     // Temporarily stores data from dialogs
     dialogData: any;
+
+     shortestPath : ShortestPathModel;
+    
       
   
     constructor(private http: HttpClient, private toasterService: ToastrService ) { 
@@ -27,8 +30,16 @@ export class PlanetService {
     }
 
     findShortestPath(shortestPathModel: ShortestPathModel){
-      
-      return this.http.post<any[]>(`${environment.apiUrl}/shortest`, shortestPathModel);
+      // return this.http.post(`${environment.apiUrl}/shortest`, shortestPathModel, {responseType:'text'});
+      return  this.http.post(`${environment.apiUrl}/shortest`, shortestPathModel, {responseType:'text'}).subscribe(data => {
+        console.log(data);
+        this.dialogData = shortestPathModel;
+       this.toasterService.success('The Shortest Path is: ' + data);
+        },
+       (err: HttpErrorResponse) => {
+        console.log(err.statusText);
+       this.toasterService.error('Error occurred. Details: ' + err.statusText + ' ' + err.message);
+      });
     }
 
     get data(): PlanetModel[] {
