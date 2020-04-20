@@ -83,7 +83,7 @@ export class InterstellaTransportComponent implements OnInit {
       });
     }
   
-    editPlanet(name: string, vertexId: string) {
+    editPlanet(name: string, vertexId: string, id) {
       this.planetModel.name = name;
       this.planetModel.vertexId = vertexId
       // index row is used just for debugging proposes and can be removed
