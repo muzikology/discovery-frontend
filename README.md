@@ -12,7 +12,7 @@ wil show 4 input textfield:
 
 A = SelectedVertex
 Earth = SelectedVertexName
-M = VertexID
+J = VertexID
 Mercury = VertexName
 
 The are also CRUD functions for adding, editing and deleting a planet. To select the shortest path functionality simply 
